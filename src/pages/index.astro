@@ -1,8 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import HeroPost from '../components/HeroPost.astro';
-import PostCard from '../components/PostCard.astro';
+import FeedItem from '../components/FeedItem.astro';
+import Sidebar from '../components/Sidebar.astro';
 
 type PostType = 'essay' | 'poetry' | 'photo' | 'note';
 
@@ -20,68 +20,56 @@ const allPosts = [
   ...notes.map(n => ({ ...n, type: 'note' as PostType })),
 ].sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-const hero = allPosts[0];
-const grid = allPosts.slice(1);
+const sidebarPosts = allPosts.slice(0, 5).map(p => ({
+  type: p.type,
+  title: p.data.title,
+  slug: p.slug,
+  image: 'image' in p.data ? (p.data as any).image as string | undefined : undefined,
+}));
+
+const counts = {
+  essays: essays.length,
+  poetry: poetry.length,
+  photos: photos.length,
+  notes: notes.length,
+};
 ---
 
 <BaseLayout title="Fy Awen" description="Words, images and inspiration — a personal blog.">
-  <div class="home">
-    <div class="container">
+  <div class="container home-layout">
 
-      {hero && (
-        <section class="home-hero">
-          <HeroPost
-            type={hero.type}
-            title={hero.data.title}
-            slug={hero.slug}
-            date={hero.data.date}
-            description={'description' in hero.data ? (hero.data as any).description : undefined}
-            image={'image' in hero.data ? (hero.data as any).image : undefined}
-          />
-        </section>
-      )}
+    <main class="feed">
+      {allPosts.map(post => (
+        <FeedItem
+          type={post.type}
+          title={post.data.title}
+          slug={post.slug}
+          date={post.data.date}
+          description={'description' in post.data ? (post.data as any).description : undefined}
+          image={'image' in post.data ? (post.data as any).image : undefined}
+        />
+      ))}
+    </main>
 
-      {grid.length > 0 && (
-        <section class="home-grid">
-          <h2 class="section-label">Latest</h2>
-          <div class="grid-3">
-            {grid.map(post => (
-              <PostCard
-                type={post.type}
-                title={post.data.title}
-                slug={post.slug}
-                date={post.data.date}
-                description={'description' in post.data ? (post.data as any).description : undefined}
-                image={'image' in post.data ? (post.data as any).image : undefined}
-              />
-            ))}
-          </div>
-        </section>
-      )}
+    <Sidebar recent={sidebarPosts} counts={counts} />
 
-    </div>
   </div>
 </BaseLayout>
 
 <style>
-  .home {
-    padding-bottom: 4rem;
-  }
-
-  .home-hero {
+  .home-layout {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 4rem;
     padding-top: 3rem;
-    margin-bottom: 4rem;
+    padding-bottom: 5rem;
+    align-items: start;
   }
 
-  .section-label {
-    font-family: var(--font-body);
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--gray);
-    margin-bottom: 2rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--border);
+  @media (max-width: 900px) {
+    .home-layout {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
   }
 </style>

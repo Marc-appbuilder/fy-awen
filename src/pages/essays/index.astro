@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import PostCard from '../../components/PostCard.astro';
+import FeedItem from '../../components/FeedItem.astro';
 
 const essays = await getCollection('essays');
 const sorted = essays.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
@@ -14,9 +14,9 @@ const sorted = essays.sort((a, b) => b.data.date.getTime() - a.data.date.getTime
       <h1 class="page-title">Writing</h1>
       <p class="page-description">Long-form thoughts, reflections, and explorations.</p>
     </header>
-    <div class="grid-3">
+    <div class="feed">
       {sorted.map(post => (
-        <PostCard
+        <FeedItem
           type="essay"
           title={post.data.title}
           slug={post.slug}
@@ -28,3 +28,7 @@ const sorted = essays.sort((a, b) => b.data.date.getTime() - a.data.date.getTime
     </div>
   </div>
 </BaseLayout>
+
+<style>
+  .feed { max-width: 780px; }
+</style>
