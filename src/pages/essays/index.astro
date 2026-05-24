@@ -1,0 +1,30 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+
+const essays = await getCollection('essays');
+const sorted = essays.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<BaseLayout title="Essays" description="Long-form writing and reflections.">
+  <div class="container">
+    <header class="page-header">
+      <span class="label">Essays</span>
+      <h1 class="page-title">Writing</h1>
+      <p class="page-description">Long-form thoughts, reflections, and explorations.</p>
+    </header>
+    <div class="grid-3">
+      {sorted.map(post => (
+        <PostCard
+          type="essay"
+          title={post.data.title}
+          slug={post.slug}
+          date={post.data.date}
+          description={post.data.description}
+          image={post.data.image}
+        />
+      ))}
+    </div>
+  </div>
+</BaseLayout>

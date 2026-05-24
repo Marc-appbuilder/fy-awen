@@ -1,0 +1,118 @@
+---
+interface Props {
+  type: 'essay' | 'poetry' | 'photo' | 'note';
+  title: string;
+  slug: string;
+  date: Date;
+  description?: string;
+  image?: string;
+}
+
+const { type, title, slug, date, description, image } = Astro.props;
+
+const sectionMap = { essay: 'essays', poetry: 'poetry', photo: 'photos', note: 'notes' };
+const href = `/${sectionMap[type]}/${slug}`;
+
+const typeLabel = { essay: 'Essay', poetry: 'Poetry', photo: 'Photo', note: 'Note' }[type];
+
+const dateStr = date.toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<article class={`card card--${type}`}>
+  {image && (type === 'essay' || type === 'photo') && (
+    <a href={href} class="card-img-link" tabindex="-1" aria-hidden="true">
+      <div class="card-img">
+        <img src={image} alt={title} loading="lazy" />
+      </div>
+    </a>
+  )}
+  <div class="card-body">
+    <span class="label">{typeLabel}</span>
+    <h3 class="card-title">
+      <a href={href}>{title}</a>
+    </h3>
+    {description && <p class="card-desc">{description}</p>}
+    <time class="card-date" datetime={date.toISOString()}>{dateStr}</time>
+  </div>
+</article>
+
+<style>
+  .card {
+    border-top: 2px solid var(--black);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-img {
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    background: var(--light-gray);
+  }
+
+  .card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .card-img-link:hover .card-img img {
+    transform: scale(1.04);
+  }
+
+  .card-body {
+    padding: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    flex: 1;
+  }
+
+  .card-title {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .card-title a:hover { color: var(--accent); }
+
+  .card-desc {
+    font-size: 0.9rem;
+    color: var(--gray);
+    line-height: 1.55;
+    flex: 1;
+  }
+
+  .card-date {
+    font-size: 0.7rem;
+    color: var(--gray);
+    letter-spacing: 0.04em;
+    margin-top: 0.25rem;
+  }
+
+  /* Poetry: italic title, red top border */
+  .card--poetry {
+    border-top-color: var(--accent);
+  }
+
+  .card--poetry .card-title {
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  /* Note: compact, tinted background */
+  .card--note {
+    border-top: 1px solid var(--border);
+    background: var(--off-white);
+    padding: 1.25rem;
+  }
+
+  .card--note .card-body {
+    padding: 0;
+  }
+</style>

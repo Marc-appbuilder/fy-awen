@@ -1,0 +1,28 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+
+const notes = await getCollection('notes');
+const sorted = notes.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<BaseLayout title="Notes" description="Short thoughts and observations.">
+  <div class="container">
+    <header class="page-header">
+      <span class="label">Notes</span>
+      <h1 class="page-title">Notes</h1>
+      <p class="page-description">Short thoughts, observations, things that catch me.</p>
+    </header>
+    <div class="grid-3">
+      {sorted.map(post => (
+        <PostCard
+          type="note"
+          title={post.data.title}
+          slug={post.slug}
+          date={post.data.date}
+        />
+      ))}
+    </div>
+  </div>
+</BaseLayout>

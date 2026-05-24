@@ -1,0 +1,87 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  date: Date;
+}
+
+const { title, description, date } = Astro.props;
+
+const dateStr = date.toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="poetry-article">
+    <div class="container">
+      <header class="poetry-header">
+        <span class="label">Poetry</span>
+        <h1 class="poetry-title">{title}</h1>
+        {description && <p class="poetry-desc">{description}</p>}
+        <time class="poetry-date" datetime={date.toISOString()}>{dateStr}</time>
+      </header>
+      <div class="poetry-body">
+        <slot />
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .poetry-article {
+    padding: 4rem 0 6rem;
+  }
+
+  .poetry-header {
+    max-width: 620px;
+    margin: 0 auto 3rem;
+    border-left: 3px solid var(--accent);
+    padding-left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .poetry-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    font-weight: 700;
+    font-style: italic;
+    line-height: 1.15;
+  }
+
+  .poetry-desc {
+    font-size: 0.95rem;
+    color: var(--gray);
+    font-style: italic;
+  }
+
+  .poetry-date {
+    font-size: 0.7rem;
+    color: var(--gray);
+    letter-spacing: 0.05em;
+  }
+
+  .poetry-body {
+    max-width: 540px;
+    margin: 0 auto;
+  }
+
+  /* Poetry stanzas: preserve line breaks, generous spacing */
+  .poetry-body :global(p) {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    line-height: 2;
+    white-space: pre-line;
+    margin-bottom: 2.5rem;
+  }
+
+  .poetry-body :global(em) {
+    font-style: italic;
+  }
+</style>

@@ -1,0 +1,92 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  date: Date;
+  type: 'essay' | 'note';
+}
+
+const { title, description, image, date, type } = Astro.props;
+
+const typeLabel = type === 'essay' ? 'Essay' : 'Note';
+const dateStr = date.toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<BaseLayout title={title} description={description} image={image}>
+  <article class="post-article">
+    {image && (
+      <div class="post-hero-img">
+        <img src={image} alt={title} />
+      </div>
+    )}
+    <div class="container">
+      <header class="post-header">
+        <span class="label">{typeLabel}</span>
+        <h1 class="post-title">{title}</h1>
+        {description && <p class="post-desc">{description}</p>}
+        <time class="post-date" datetime={date.toISOString()}>{dateStr}</time>
+      </header>
+      <div class="post-body prose">
+        <slot />
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .post-hero-img {
+    width: 100%;
+    height: 520px;
+    overflow: hidden;
+    background: var(--light-gray);
+    margin-bottom: 3rem;
+  }
+
+  .post-hero-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .post-header {
+    max-width: 720px;
+    margin: 0 auto 2.5rem;
+    padding-top: 3rem;
+    border-top: 3px solid var(--black);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .post-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+  }
+
+  .post-desc {
+    font-size: 1.15rem;
+    color: var(--gray);
+    line-height: 1.6;
+  }
+
+  .post-date {
+    font-size: 0.72rem;
+    color: var(--gray);
+    letter-spacing: 0.05em;
+  }
+
+  .post-body {
+    max-width: 720px;
+    margin: 0 auto;
+    padding-bottom: 5rem;
+  }
+</style>

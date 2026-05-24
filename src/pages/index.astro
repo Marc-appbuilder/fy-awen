@@ -1,0 +1,87 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroPost from '../components/HeroPost.astro';
+import PostCard from '../components/PostCard.astro';
+
+type PostType = 'essay' | 'poetry' | 'photo' | 'note';
+
+const [essays, poetry, photos, notes] = await Promise.all([
+  getCollection('essays'),
+  getCollection('poetry'),
+  getCollection('photos'),
+  getCollection('notes'),
+]);
+
+const allPosts = [
+  ...essays.map(e => ({ ...e, type: 'essay' as PostType })),
+  ...poetry.map(p => ({ ...p, type: 'poetry' as PostType })),
+  ...photos.map(p => ({ ...p, type: 'photo' as PostType })),
+  ...notes.map(n => ({ ...n, type: 'note' as PostType })),
+].sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const hero = allPosts[0];
+const grid = allPosts.slice(1);
+---
+
+<BaseLayout title="Fy Awen" description="Words, images and inspiration — a personal blog.">
+  <div class="home">
+    <div class="container">
+
+      {hero && (
+        <section class="home-hero">
+          <HeroPost
+            type={hero.type}
+            title={hero.data.title}
+            slug={hero.slug}
+            date={hero.data.date}
+            description={'description' in hero.data ? (hero.data as any).description : undefined}
+            image={'image' in hero.data ? (hero.data as any).image : undefined}
+          />
+        </section>
+      )}
+
+      {grid.length > 0 && (
+        <section class="home-grid">
+          <h2 class="section-label">Latest</h2>
+          <div class="grid-3">
+            {grid.map(post => (
+              <PostCard
+                type={post.type}
+                title={post.data.title}
+                slug={post.slug}
+                date={post.data.date}
+                description={'description' in post.data ? (post.data as any).description : undefined}
+                image={'image' in post.data ? (post.data as any).image : undefined}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .home {
+    padding-bottom: 4rem;
+  }
+
+  .home-hero {
+    padding-top: 3rem;
+    margin-bottom: 4rem;
+  }
+
+  .section-label {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 2rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+</style>

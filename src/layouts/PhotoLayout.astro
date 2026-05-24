@@ -1,0 +1,91 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  image: string;
+  date: Date;
+}
+
+const { title, description, image, date } = Astro.props;
+
+const dateStr = date.toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<BaseLayout title={title} description={description} image={image}>
+  <article class="photo-article">
+    <div class="photo-lead">
+      <img src={image} alt={title} />
+    </div>
+    <div class="container">
+      <header class="photo-header">
+        <span class="label">Photo</span>
+        <h1 class="photo-title">{title}</h1>
+        {description && <p class="photo-desc">{description}</p>}
+        <time class="photo-date" datetime={date.toISOString()}>{dateStr}</time>
+      </header>
+      <div class="photo-body prose">
+        <slot />
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .photo-lead {
+    width: 100%;
+    max-height: 720px;
+    overflow: hidden;
+    background: var(--black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3rem;
+  }
+
+  .photo-lead img {
+    width: 100%;
+    max-height: 720px;
+    object-fit: contain;
+  }
+
+  .photo-header {
+    max-width: 720px;
+    margin: 0 auto 2rem;
+    border-top: 2px solid var(--black);
+    padding-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .photo-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    font-weight: 900;
+    line-height: 1.1;
+  }
+
+  .photo-desc {
+    font-size: 1.05rem;
+    color: var(--gray);
+    line-height: 1.6;
+  }
+
+  .photo-date {
+    font-size: 0.7rem;
+    color: var(--gray);
+    letter-spacing: 0.05em;
+  }
+
+  .photo-body {
+    max-width: 720px;
+    margin: 0 auto;
+    padding-bottom: 5rem;
+  }
+</style>
