@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FeedItem from '../../components/FeedItem.astro';
+
+const music = await getCollection('music');
+const sorted = music.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<BaseLayout title="Music" description="Music.">
+  <div class="container">
+    <header class="page-header">
+      <span class="label">Music</span>
+      <h1 class="page-title">Music</h1>
+    </header>
+    <div class="feed">
+      {sorted.map(post => (
+        <FeedItem
+          type="music"
+          title={post.data.title}
+          slug={post.slug}
+          date={post.data.date}
+          description={post.data.description}
+          image={post.data.image}
+        />
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .feed { max-width: 780px; }
+</style>

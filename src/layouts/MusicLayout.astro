@@ -1,0 +1,130 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { getAudioEmbed } from '../utils/media';
+
+interface Props {
+  title: string;
+  description?: string;
+  audio: string;
+  image?: string;
+  date: Date;
+}
+
+const { title, description, audio, image, date } = Astro.props;
+const { type, src } = getAudioEmbed(audio);
+
+const dateStr = date.toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
+const iframeHeight = type === 'spotify' ? '152' : '166';
+---
+
+<BaseLayout title={title} description={description} image={image}>
+  <article class="music-article">
+    {image && (
+      <div class="music-cover">
+        <img src={image} alt={title} />
+      </div>
+    )}
+    <div class="container">
+      <header class="music-header">
+        <span class="label">Music</span>
+        <h1 class="music-title">{title}</h1>
+        {description && <p class="music-desc">{description}</p>}
+        <time class="music-date" datetime={date.toISOString()}>{dateStr}</time>
+      </header>
+
+      <div class="music-player">
+        {type === 'direct' ? (
+          <audio controls class="audio-element">
+            <source src={src} />
+          </audio>
+        ) : (
+          <iframe
+            src={src}
+            height={iframeHeight}
+            frameborder="0"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+            title={title}
+          />
+        )}
+      </div>
+
+      <div class="music-body prose">
+        <slot />
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .music-cover {
+    width: 100%;
+    max-height: 480px;
+    overflow: hidden;
+    background: var(--black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3rem;
+  }
+
+  .music-cover img {
+    max-height: 480px;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .music-header {
+    max-width: 720px;
+    margin: 0 auto 1.5rem;
+    padding-top: 3rem;
+    border-top: 2px solid var(--black);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .music-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    font-weight: 900;
+    line-height: 1.1;
+  }
+
+  .music-desc {
+    font-size: 1.05rem;
+    color: var(--gray);
+    line-height: 1.6;
+  }
+
+  .music-date {
+    font-size: 0.7rem;
+    color: var(--gray);
+    letter-spacing: 0.05em;
+  }
+
+  .music-player {
+    max-width: 720px;
+    margin: 0 auto 2rem;
+  }
+
+  .music-player iframe {
+    width: 100%;
+    border-radius: 0;
+  }
+
+  .audio-element {
+    width: 100%;
+  }
+
+  .music-body {
+    max-width: 720px;
+    margin: 0 auto;
+    padding-bottom: 5rem;
+  }
+</style>

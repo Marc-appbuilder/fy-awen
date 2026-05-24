@@ -2,21 +2,26 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import FeedItem from '../components/FeedItem.astro';
+import { getYouTubeThumbnail } from '../utils/media';
 
-type PostType = 'essay' | 'poetry' | 'photo' | 'note';
+type PostType = 'essay' | 'poetry' | 'photo' | 'note' | 'video' | 'music';
 
-const [essays, poetry, photos, notes] = await Promise.all([
+const [essays, poetry, photos, notes, videos, music] = await Promise.all([
   getCollection('essays'),
   getCollection('poetry'),
   getCollection('photos'),
   getCollection('notes'),
+  getCollection('videos'),
+  getCollection('music'),
 ]);
 
 const allPosts = [
-  ...essays.map(e => ({ ...e, type: 'essay' as PostType })),
-  ...poetry.map(p => ({ ...p, type: 'poetry' as PostType })),
-  ...photos.map(p => ({ ...p, type: 'photo' as PostType })),
-  ...notes.map(n => ({ ...n, type: 'note' as PostType })),
+  ...essays.map(e => ({ ...e, type: 'essay' as PostType, image: e.data.image })),
+  ...poetry.map(p => ({ ...p, type: 'poetry' as PostType, image: undefined })),
+  ...photos.map(p => ({ ...p, type: 'photo' as PostType, image: p.data.image })),
+  ...notes.map(n => ({ ...n, type: 'note' as PostType, image: undefined })),
+  ...videos.map(v => ({ ...v, type: 'video' as PostType, image: v.data.image ?? getYouTubeThumbnail(v.data.video) })),
+  ...music.map(m => ({ ...m, type: 'music' as PostType, image: m.data.image })),
 ].sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 ---
 
@@ -29,7 +34,7 @@ const allPosts = [
         slug={post.slug}
         date={post.data.date}
         description={'description' in post.data ? (post.data as any).description : undefined}
-        image={'image' in post.data ? (post.data as any).image : undefined}
+        image={post.image}
       />
     ))}
   </div>

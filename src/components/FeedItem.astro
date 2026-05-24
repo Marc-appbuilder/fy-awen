@@ -1,6 +1,6 @@
 ---
 interface Props {
-  type: 'essay' | 'poetry' | 'photo' | 'note';
+  type: 'essay' | 'poetry' | 'photo' | 'note' | 'video' | 'music';
   title: string;
   slug: string;
   date: Date;
@@ -10,9 +10,9 @@ interface Props {
 
 const { type, title, slug, date, description, image } = Astro.props;
 
-const sectionMap = { essay: 'essays', poetry: 'poetry', photo: 'photos', note: 'notes' };
+const sectionMap = { essay: 'essays', poetry: 'poetry', photo: 'photos', note: 'notes', video: 'videos', music: 'music' };
 const href = `/${sectionMap[type]}/${slug}`;
-const typeLabel = { essay: 'Essay', poetry: 'Poetry', photo: 'Photo', note: 'Note' }[type];
+const typeLabel = { essay: 'Essay', poetry: 'Poetry', photo: 'Photo', note: 'Note', video: 'Video', music: 'Music' }[type];
 
 const dateStr = date.toLocaleDateString('en-GB', {
   day: 'numeric',
@@ -87,6 +87,8 @@ const dateStr = date.toLocaleDateString('en-GB', {
   .feed-img--poetry   { background: #e4e0d8; border-left: 3px solid var(--accent); }
   .feed-img--photo    { background: #d8d8d8; }
   .feed-img--note     { background: #f0ede8; }
+  .feed-img--video    { background: #1a1a1a; }
+  .feed-img--music    { background: #2a2020; }
 
   .placeholder-glyph {
     font-family: var(--font-display);
@@ -94,6 +96,11 @@ const dateStr = date.toLocaleDateString('en-GB', {
     font-style: italic;
     color: rgba(0,0,0,0.12);
     user-select: none;
+  }
+
+  .feed-img--video .placeholder-glyph,
+  .feed-img--music .placeholder-glyph {
+    color: rgba(255,255,255,0.15);
   }
 
   .feed-text {

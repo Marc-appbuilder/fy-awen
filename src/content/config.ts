@@ -39,4 +39,24 @@ const notes = defineCollection({
   }),
 });
 
-export const collections = { essays, poetry, photos, notes };
+const videos = defineCollection({
+  type: 'content',
+  schema: z.object({
+    ...shared,
+    description: z.string().optional(),
+    video: z.string(),   // YouTube, Vimeo, or direct .mp4 URL
+    image: z.string().optional(),
+  }),
+});
+
+const music = defineCollection({
+  type: 'content',
+  schema: z.object({
+    ...shared,
+    description: z.string().optional(),
+    audio: z.string(),   // Spotify, SoundCloud, or direct .mp3 URL
+    image: z.string().optional(),
+  }),
+});
+
+export const collections = { essays, poetry, photos, notes, videos, music };

@@ -1,12 +1,4 @@
 ---
-const navItems = [
-  { label: 'Essays', href: '/essays' },
-  { label: 'Poetry', href: '/poetry' },
-  { label: 'Photos', href: '/photos' },
-  { label: 'Notes', href: '/notes' },
-];
-
-const currentPath = Astro.url.pathname;
 ---
 
 <header class="site-header">
@@ -14,24 +6,18 @@ const currentPath = Astro.url.pathname;
     <a href="/" class="site-brand">
       <span class="brand-name">Fy Awen</span>
     </a>
-    <nav class="site-nav" aria-label="Main navigation">
-      {navItems.map(item => (
-        <a
-          href={item.href}
-          class={`nav-link ${currentPath.startsWith(item.href) ? 'active' : ''}`}
-        >
-          {item.label}
-        </a>
-      ))}
+    <nav class="site-nav">
+      <a href="/newsletter" class="nav-link">Newsletter</a>
+      <a href="/subscribe" class="nav-btn">Subscribe</a>
     </nav>
   </div>
 </header>
 
 <style>
   .site-header {
-    background: var(--black);
-    color: var(--white);
-    border-bottom: 3px solid var(--accent);
+    background: var(--white);
+    color: var(--black);
+    border-bottom: 1px solid var(--black);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -41,19 +27,16 @@ const currentPath = Astro.url.pathname;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    gap: 1.5rem;
+    padding-top: 0.9rem;
+    padding-bottom: 0.9rem;
   }
 
   .site-brand {
-    display: flex;
-    flex-direction: column;
-    color: var(--white);
-    flex-shrink: 0;
+    color: var(--black);
+    display: inline-block;
   }
 
-  .site-brand:hover { color: var(--white); }
+  .site-brand:hover { color: var(--black); }
 
   .brand-name {
     font-family: var(--font-display);
@@ -65,27 +48,38 @@ const currentPath = Astro.url.pathname;
 
   .site-nav {
     display: flex;
-    gap: 2rem;
-    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.5rem;
   }
 
   .nav-link {
     font-family: var(--font-body);
-    font-size: 0.75rem;
+    font-size: 0.78rem;
     font-weight: 500;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.65);
+    color: var(--gray);
     transition: color 0.15s;
   }
 
-  .nav-link:hover,
-  .nav-link.active {
-    color: var(--accent);
+  .nav-link:hover { color: var(--black); }
+
+  .nav-btn {
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--white);
+    background: var(--black);
+    padding: 0.45rem 1rem;
+    transition: background 0.15s;
   }
 
+  .nav-btn:hover { background: var(--accent); color: var(--white); }
+
   @media (max-width: 560px) {
-    .site-nav { gap: 1.2rem; }
-    .brand-name { font-size: 1.4rem; }
+    .brand-name { font-size: 1.8rem; }
+    .site-nav { gap: 1rem; }
   }
 </style>
