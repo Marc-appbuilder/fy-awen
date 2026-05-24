@@ -22,17 +22,14 @@ const dateStr = date.toLocaleDateString('en-GB', {
 ---
 
 <article class={`feed-item feed-item--${type}`}>
-  {image ? (
-    <a href={href} class="feed-img-link" tabindex="-1" aria-hidden="true">
-      <div class="feed-img">
-        <img src={image} alt={title} loading="lazy" />
-      </div>
-    </a>
-  ) : (
-    <div class={`feed-img-placeholder feed-img-placeholder--${type}`} aria-hidden="true">
-      <span class="placeholder-label">{typeLabel}</span>
+  <a href={href} class="feed-img-link" tabindex="-1" aria-hidden="true">
+    <div class={`feed-img ${!image ? `feed-img--placeholder feed-img--${type}` : ''}`}>
+      {image
+        ? <img src={image} alt={title} loading="lazy" />
+        : <span class="placeholder-glyph">{typeLabel[0]}</span>
+      }
     </div>
-  )}
+  </a>
 
   <div class="feed-text">
     <span class="label">{typeLabel}</span>
@@ -47,8 +44,8 @@ const dateStr = date.toLocaleDateString('en-GB', {
 <style>
   .feed-item {
     display: grid;
-    grid-template-columns: 220px 1fr;
-    gap: 1.5rem;
+    grid-template-columns: 240px 1fr;
+    gap: 1.75rem;
     padding: 1.75rem 0;
     border-bottom: 1px solid var(--border);
     align-items: start;
@@ -58,9 +55,11 @@ const dateStr = date.toLocaleDateString('en-GB', {
     border-top: 1px solid var(--border);
   }
 
+  .feed-img-link { display: block; }
+
   .feed-img {
-    width: 220px;
-    height: 150px;
+    width: 240px;
+    height: 160px;
     overflow: hidden;
     background: var(--light-gray);
     flex-shrink: 0;
@@ -77,35 +76,24 @@ const dateStr = date.toLocaleDateString('en-GB', {
     transform: scale(1.05);
   }
 
-  .feed-img-placeholder {
-    width: 220px;
-    height: 150px;
+  /* Placeholder styling — intentional, not an error state */
+  .feed-img--placeholder {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
   }
 
-  .feed-img-placeholder--poetry {
-    background: #f0ede8;
-    border-left: 3px solid var(--accent);
-  }
+  .feed-img--essay    { background: #e8e6e1; }
+  .feed-img--poetry   { background: #e4e0d8; border-left: 3px solid var(--accent); }
+  .feed-img--photo    { background: #d8d8d8; }
+  .feed-img--note     { background: #f0ede8; }
 
-  .feed-img-placeholder--note {
-    background: var(--off-white);
-    border: 1px solid var(--border);
-  }
-
-  .feed-img-placeholder--essay {
-    background: var(--light-gray);
-  }
-
-  .placeholder-label {
+  .placeholder-glyph {
     font-family: var(--font-display);
+    font-size: 3.5rem;
     font-style: italic;
-    font-size: 0.85rem;
-    color: var(--gray);
-    letter-spacing: 0.05em;
+    color: rgba(0,0,0,0.12);
+    user-select: none;
   }
 
   .feed-text {
@@ -117,7 +105,7 @@ const dateStr = date.toLocaleDateString('en-GB', {
 
   .feed-title {
     font-family: var(--font-display);
-    font-size: 1.45rem;
+    font-size: 1.5rem;
     font-weight: 700;
     line-height: 1.2;
   }
@@ -139,16 +127,15 @@ const dateStr = date.toLocaleDateString('en-GB', {
     font-size: 0.68rem;
     color: var(--gray);
     letter-spacing: 0.05em;
-    margin-top: 0.25rem;
+    margin-top: 0.2rem;
   }
 
-  @media (max-width: 560px) {
+  @media (max-width: 600px) {
     .feed-item {
       grid-template-columns: 1fr;
     }
 
-    .feed-img,
-    .feed-img-placeholder {
+    .feed-img {
       width: 100%;
       height: 200px;
     }

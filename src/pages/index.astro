@@ -2,7 +2,6 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import FeedItem from '../components/FeedItem.astro';
-import Sidebar from '../components/Sidebar.astro';
 
 type PostType = 'essay' | 'poetry' | 'photo' | 'note';
 
@@ -19,57 +18,27 @@ const allPosts = [
   ...photos.map(p => ({ ...p, type: 'photo' as PostType })),
   ...notes.map(n => ({ ...n, type: 'note' as PostType })),
 ].sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
-
-const sidebarPosts = allPosts.slice(0, 5).map(p => ({
-  type: p.type,
-  title: p.data.title,
-  slug: p.slug,
-  image: 'image' in p.data ? (p.data as any).image as string | undefined : undefined,
-}));
-
-const counts = {
-  essays: essays.length,
-  poetry: poetry.length,
-  photos: photos.length,
-  notes: notes.length,
-};
 ---
 
-<BaseLayout title="Fy Awen" description="Words, images and inspiration — a personal blog.">
-  <div class="container home-layout">
-
-    <main class="feed">
-      {allPosts.map(post => (
-        <FeedItem
-          type={post.type}
-          title={post.data.title}
-          slug={post.slug}
-          date={post.data.date}
-          description={'description' in post.data ? (post.data as any).description : undefined}
-          image={'image' in post.data ? (post.data as any).image : undefined}
-        />
-      ))}
-    </main>
-
-    <Sidebar recent={sidebarPosts} counts={counts} />
-
+<BaseLayout title="Fy Awen" description="Words, images and inspiration.">
+  <div class="container feed-page">
+    {allPosts.map(post => (
+      <FeedItem
+        type={post.type}
+        title={post.data.title}
+        slug={post.slug}
+        date={post.data.date}
+        description={'description' in post.data ? (post.data as any).description : undefined}
+        image={'image' in post.data ? (post.data as any).image : undefined}
+      />
+    ))}
   </div>
 </BaseLayout>
 
 <style>
-  .home-layout {
-    display: grid;
-    grid-template-columns: 1fr 280px;
-    gap: 4rem;
-    padding-top: 3rem;
+  .feed-page {
+    max-width: 860px;
+    padding-top: 2.5rem;
     padding-bottom: 5rem;
-    align-items: start;
-  }
-
-  @media (max-width: 900px) {
-    .home-layout {
-      grid-template-columns: 1fr;
-      gap: 3rem;
-    }
   }
 </style>

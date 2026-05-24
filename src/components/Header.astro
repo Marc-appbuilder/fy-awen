@@ -13,7 +13,6 @@ const currentPath = Astro.url.pathname;
   <div class="container header-inner">
     <a href="/" class="site-brand">
       <span class="brand-name">Fy Awen</span>
-      <span class="brand-sub">My Inspiration</span>
     </a>
     <nav class="site-nav" aria-label="Main navigation">
       {navItems.map(item => (
@@ -58,19 +57,10 @@ const currentPath = Astro.url.pathname;
 
   .brand-name {
     font-family: var(--font-display);
-    font-size: 1.7rem;
+    font-size: 2.4rem;
     font-weight: 900;
     line-height: 1;
     letter-spacing: -0.02em;
-  }
-
-  .brand-sub {
-    font-family: var(--font-body);
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.45);
-    margin-top: 0.25rem;
   }
 
   .site-nav {
