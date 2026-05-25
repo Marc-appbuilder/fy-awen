@@ -76,7 +76,6 @@ const dateStr = date.toLocaleDateString('en-GB', {
     transform: scale(1.05);
   }
 
-  /* Placeholder styling — intentional, not an error state */
   .feed-img--placeholder {
     display: flex;
     align-items: center;
@@ -84,7 +83,7 @@ const dateStr = date.toLocaleDateString('en-GB', {
   }
 
   .feed-img--essay    { background: #e8e6e1; }
-  .feed-img--poetry   { background: #e4e0d8; border-left: 3px solid var(--accent); }
+  .feed-img--poetry   { background: #e4e0d8; }
   .feed-img--photo    { background: #d8d8d8; }
   .feed-img--note     { background: #f0ede8; }
   .feed-img--video    { background: #1a1a1a; }
@@ -132,14 +131,32 @@ const dateStr = date.toLocaleDateString('en-GB', {
     margin-top: 0.2rem;
   }
 
+  /* ── Mobile: full-bleed images ── */
   @media (max-width: 600px) {
     .feed-item {
       grid-template-columns: 1fr;
+      padding: 0 0 1.75rem 0;
+      gap: 0;
+    }
+
+    .feed-item:first-of-type {
+      border-top: none;
+    }
+
+    /* Break image out of container padding to hit screen edges */
+    .feed-img-link {
+      margin-left: -1.5rem;
+      margin-right: -1.5rem;
     }
 
     .feed-img {
       width: 100%;
-      height: 200px;
+      height: 56vw;
+      max-height: 260px;
+    }
+
+    .feed-text {
+      padding: 1rem 0 0;
     }
   }
 </style>

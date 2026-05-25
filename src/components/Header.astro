@@ -7,8 +7,8 @@
       <span class="brand-name">Fy Awen</span>
     </a>
     <nav class="site-nav">
-      <a href="/" class="nav-link">Blogs</a>
-      <a href="/newsletter" class="nav-link">Newsletter</a>
+      <a href="/" class="nav-link nav-link--hide">Blogs</a>
+      <a href="/newsletter" class="nav-link nav-link--hide">Newsletter</a>
       <a href="/subscribe" class="nav-btn">Subscribe</a>
     </nav>
   </div>
@@ -28,20 +28,21 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: 0.9rem;
-    padding-bottom: 0.9rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
   }
 
   .site-brand {
     color: var(--black);
     display: inline-block;
+    flex-shrink: 0;
   }
 
   .site-brand:hover { color: var(--black); }
 
   .brand-name {
     font-family: var(--font-display);
-    font-size: 2.4rem;
+    font-size: 2.2rem;
     font-weight: 900;
     line-height: 1;
     letter-spacing: -0.02em;
@@ -51,36 +52,40 @@
     display: flex;
     align-items: center;
     gap: 1.5rem;
+    flex-shrink: 0;
   }
 
   .nav-link {
     font-family: var(--font-body);
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     font-weight: 500;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--gray);
     transition: color 0.15s;
+    white-space: nowrap;
   }
 
   .nav-link:hover { color: var(--black); }
 
   .nav-btn {
     font-family: var(--font-body);
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--white);
     background: var(--black);
     padding: 0.45rem 1rem;
+    white-space: nowrap;
     transition: background 0.15s;
   }
 
-  .nav-btn:hover { background: var(--accent); color: var(--white); }
+  .nav-btn:hover { background: var(--accent); }
 
-  @media (max-width: 560px) {
-    .brand-name { font-size: 1.8rem; }
-    .site-nav { gap: 1rem; }
+  @media (max-width: 600px) {
+    .brand-name { font-size: 1.6rem; }
+    .nav-link--hide { display: none; }
+    .site-nav { gap: 0; }
   }
 </style>
