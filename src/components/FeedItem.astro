@@ -32,7 +32,7 @@ const dateStr = date.toLocaleDateString('en-GB', {
   </a>
 
   <div class="feed-text">
-    <span class="label">{typeLabel}</span>
+    <span class="label type-label">{typeLabel}</span>
     <h2 class="feed-title">
       <a href={href}>{title}</a>
     </h2>
@@ -42,6 +42,7 @@ const dateStr = date.toLocaleDateString('en-GB', {
 </article>
 
 <style>
+  /* ── Desktop layout ── */
   .feed-item {
     display: grid;
     grid-template-columns: 240px 1fr;
@@ -82,12 +83,12 @@ const dateStr = date.toLocaleDateString('en-GB', {
     justify-content: center;
   }
 
-  .feed-img--essay    { background: #e8e6e1; }
-  .feed-img--poetry   { background: #e4e0d8; }
-  .feed-img--photo    { background: #d8d8d8; }
-  .feed-img--note     { background: #f0ede8; }
-  .feed-img--video    { background: #1a1a1a; }
-  .feed-img--music    { background: #2a2020; }
+  .feed-img--essay  { background: #e8e6e1; }
+  .feed-img--poetry { background: #e4e0d8; }
+  .feed-img--photo  { background: #d8d8d8; }
+  .feed-img--note   { background: #f0ede8; }
+  .feed-img--video  { background: #1a1a1a; }
+  .feed-img--music  { background: #2a2020; }
 
   .placeholder-glyph {
     font-family: var(--font-display);
@@ -131,11 +132,13 @@ const dateStr = date.toLocaleDateString('en-GB', {
     margin-top: 0.2rem;
   }
 
-  /* ── Mobile: full-bleed images ── */
+  /* ── Mobile: journal layout ── */
   @media (max-width: 600px) {
     .feed-item {
-      grid-template-columns: 1fr;
-      padding: 0 0 1.75rem 0;
+      display: flex;
+      flex-direction: column;
+      padding: 0 0 3rem 0;
+      border-bottom: none;
       gap: 0;
     }
 
@@ -143,7 +146,28 @@ const dateStr = date.toLocaleDateString('en-GB', {
       border-top: none;
     }
 
-    /* Break image out of container padding to hit screen edges */
+    /* Text above image */
+    .feed-text {
+      order: -1;
+      padding: 0 0 1.1rem 0;
+      gap: 0.3rem;
+    }
+
+    /* Label quiet on mobile */
+    .type-label {
+      display: none;
+    }
+
+    .feed-title {
+      font-size: 1.65rem;
+    }
+
+    /* Description hidden on mobile — title and date are enough */
+    .feed-desc {
+      display: none;
+    }
+
+    /* Image full bleed */
     .feed-img-link {
       margin-left: -1.5rem;
       margin-right: -1.5rem;
@@ -153,10 +177,6 @@ const dateStr = date.toLocaleDateString('en-GB', {
       width: 100%;
       height: 56vw;
       max-height: 260px;
-    }
-
-    .feed-text {
-      padding: 1rem 0 0;
     }
   }
 </style>
